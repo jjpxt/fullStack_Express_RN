@@ -1,13 +1,12 @@
-import { MONGO_URI } from "@/utils/variables";
 import mongoose from "mongoose";
-
-if (!MONGO_URI) {
-    throw new Error("MONGO_URI environment variable is not defined!");
-}
+import { MONGO_URI } from "#/utils/variables";
 
 mongoose.set("strictQuery", true);
-
 mongoose
-    .connect(MONGO_URI)
-    .then(() => console.log("db is connected"))
-    .catch((error) => console.log("db connection fail:", error));
+  .connect(MONGO_URI)
+  .then(() => {
+    console.log("db is connected");
+  })
+  .catch((err) => {
+    console.log("db connection failed: ", err);
+  });
