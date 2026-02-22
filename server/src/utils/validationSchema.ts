@@ -1,3 +1,4 @@
+import { isValidObjectId } from 'mongoose';
 import * as yup from 'yup';
 
 export const CreateUserSchema = yup.object().shape({
@@ -19,4 +20,13 @@ export const CreateUserSchema = yup.object().shape({
         .matches(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$%\^&*])[a-zA-Z\d!@#\$%\^&*]+$/,
             "Password must include at least one letter, one number, and one special character (!@#$%^&*)."
         )
+});
+
+export const EmailValidationBody = yup.object().shape({
+    token: yup.string().trim().required("Invalid token!"),
+    userId: yup.string().transform(function (value) {
+
+        return (this.isType(value) && isValidObjectId(value)) ? value : "";
+
+    }).required("Invalid userId"),
 });
