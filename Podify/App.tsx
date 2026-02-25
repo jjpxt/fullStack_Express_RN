@@ -1,9 +1,7 @@
-import { Text, View } from "react-native"
+import SignUp from "@views/auth/SignUp";
 
 const App = () => {
-  return <View>
-    <Text>teste</Text>
-  </View>
+  return <SignUp />
 }
 
 export default App;
