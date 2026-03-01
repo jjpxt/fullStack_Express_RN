@@ -1,11 +1,12 @@
-import { FC } from 'react';
 import * as yup from 'yup';
-import colors from '@utils/colors';
+import AppLink from '@ui/AppLink';
+import { FC, useState } from 'react';
 import Form from '@components/form';
 import { StyleSheet, View } from 'react-native';
 import SubmitBtn from '@components/form/SubmitBtn';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
 import AuthInputField from '@components/form/AuthInputField';
+import AuthFormContainer from '@components/AuthFormContainer';
 
 
 const signupSchema = yup.object({
@@ -41,16 +42,23 @@ const initialValues = {
 };
 
 const SignUp: FC<Props> = () => {
+    const [secureEntry, setSecureEntry] = useState(true);
+
+    const togglePasswordView = () => { setSecureEntry(!secureEntry) }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <Form
-                onSubmit={(values) => {
-                    console.log(values)
-                }}
-                initialValues={initialValues}
-                validationSchema={signupSchema}
+        <Form
+            onSubmit={(values) => {
+                console.log(values)
+            }}
+            initialValues={initialValues}
+            validationSchema={signupSchema}
+        >
+            <AuthFormContainer
+                heading='Welcome'
+                subHeading='Get started on podify creating a new account'
             >
+
                 <View style={styles.formContainer}>
                     <AuthInputField
                         name='name'
@@ -72,33 +80,43 @@ const SignUp: FC<Props> = () => {
                         placeholder='*********'
                         label='Password'
                         autoCapitalize='none'
-                        secureTextEntry
+                        secureTextEntry={secureEntry}
                         name='password'
                         containerStyle={styles.marginBottom}
+                        rightIcon={<PasswordVisibilityIcon privateIcon={secureEntry}
+                        />}
+                        onRightIconPress={togglePasswordView}
                     />
 
                     <SubmitBtn title='Sign Up' />
 
+                    <View style={styles.linkContainer}>
+                        <AppLink title='Forget my password' />
+                        <AppLink title='Sign In' />
+                    </View>
+
                 </View>
-            </Form>
-        </SafeAreaView>
+
+            </AuthFormContainer>
+        </Form>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: colors.PRIMARY,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     formContainer: {
         width: '100%',
         paddingHorizontal: 15
     },
     marginBottom: {
         marginBottom: 20
-    }
+    },
+    linkContainer: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20
+    },
+
 });
 
 export default SignUp;
